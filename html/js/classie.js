@@ -27,28 +27,35 @@ var hasClass, addClass, removeClass;
 
 if ( 'classList' in document.documentElement ) {
   hasClass = function( elem, c ) {
-    return elem.classList.contains( c );
+    return elem && elem.classList && elem.classList.contains( c );
   };
   addClass = function( elem, c ) {
-    elem.classList.add( c );
+    if (elem && elem.classList) {
+      elem.classList.add( c );
+    }
   };
   removeClass = function( elem, c ) {
-    elem.classList.remove( c );
+    if (elem && elem.classList) {
+      elem.classList.remove( c );
+    }
   };
 }
 else {
   hasClass = function( elem, c ) {
-    return classReg( c ).test( elem.className );
+    return elem && classReg(c).test(elem.className);
   };
   addClass = function( elem, c ) {
-    if ( !hasClass( elem, c ) ) {
+    if (elem && !hasClass(elem, c)) {
       elem.className = elem.className + ' ' + c;
     }
   };
   removeClass = function( elem, c ) {
-    elem.className = elem.className.replace( classReg( c ), ' ' );
+    if (elem) {
+      elem.className = elem.className.replace(classReg(c), ' ').trim();
+    }
   };
 }
+
 
 function toggleClass( elem, c ) {
   var fn = hasClass( elem, c ) ? removeClass : addClass;
